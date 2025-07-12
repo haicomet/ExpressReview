@@ -10,8 +10,8 @@ Task.belongsTo(User);
 // MANY TO MANY
 // A task may have many users assigned to them
 // Users may be assigned to many tasks
-User.belongsToMany(Task, { through: "assignments" });
-Task.belongsToMany(User, { through: "assignments" });
+User.belongsToMany(Task, { through: "assignments", as: "assignedTask" });
+Task.belongsToMany(User, { through: "assignments", as: "assignee" });
 
 // Export everything needed
 module.exports = {

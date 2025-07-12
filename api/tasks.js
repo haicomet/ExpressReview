@@ -5,6 +5,20 @@ const { Task, User } = require("../database");
 // TASK 4: Add the necessary routes here
 // This time, use your newly created Sequelize models instead of the dummy database
 
+//Fetch all users assigned to a given task
+router.get("/:id/assigned-user", async (req, res) => {
+  try {
+    const taskId = Number(req.params.id); 
+    const task = await Task.findByPk(taskId,{
+      include: "assignees"
+    })
+    if (!task) {return res.status(404).json({ error: "Task not found" });}
+    res.json(task.assignees);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch assigned users" });
+  }
+})
+
 // GET all tasks
 router.get("/", async (req, res) => {
   try {
