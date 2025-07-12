@@ -98,6 +98,24 @@ router.patch("/:taskId/add-user/:userId", async (req, res) => {
   }
 })
 
+//Remove a user from a task
+router.patch("/:taskId/remove-user/:userId", async (req, res) => {
+  try{
+    const task = await Task.findByPk(req.params.taskId);
+    const user = await User.findByPk(req.params.userId);
+
+    if (!task || !user) {
+      return res.status(404).json({ error: "Task or User not found" });
+    }
+
+    await task.removeAssignee(user);
+    res.status(200).send("User removed from task");
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to remove user from task" });
+  }
+})
+
 //
 module.exports = router;
 
