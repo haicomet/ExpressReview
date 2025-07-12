@@ -79,6 +79,26 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Failed to create task" });
   }
 });
+
+//Add a user to a task
+router.patch("/:taskId/add-user/:userId", async (req, res) => {
+  try{
+    const task = await Task.findByPk(req.params.taskId);
+    const user = await User.findByPk(req.params.userId);
+
+    if (!task || !user) {
+      return res.status(404).json({ error: "Task or User not found" });
+    }
+
+    await task.addAssignee(user);
+    res.status(200).send("User added to task");
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to assign user to task" });
+  }
+})
+
+//
 module.exports = router;
 
 // TASK 5: Create a new routes file for users, and add as many routes as you see fit
