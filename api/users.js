@@ -39,6 +39,21 @@ router.get("/:id/tasks", async (req, res) => {
   }
 });
 
+//Fetch all tasks assigned to a given user
+router.get("/:id/assigned-tasks", async (req, res) => {
+  try{
+    const userId = Number(req.params.id);
+    const user = await User.findByPk(userId, {
+      include: "assignedTask"
+    })
+    if (!user) {return res.status(404).json({error: "User not found"});}
+    res.json(user.assignedTask)
+  }
+  catch {
+    res.status(500).json({ error: "Failed to fetch assigned tasks" });
+  }
+})
+
 // POST a new user
 router.post("/", async (req, res) => {
   try {
